@@ -3,6 +3,7 @@ import { EN_US } from './config/i18n/en-us'
 import { ZH_CN } from './config/i18n/zh-cn'
 import FluentEditor from './core/fluent-editor'
 import { SoftBreak, StrikeBlot, Video } from './formats'
+import { CollaborativeEditor } from './modules/collaboration' // 协同编辑
 import Counter from './modules/counter' // 字符统计
 import { CustomClipboard } from './modules/custom-clipboard' // 粘贴板
 import { BlotFormatter } from './modules/custom-image' // 图片
@@ -58,6 +59,7 @@ FluentEditor.register(
     'modules/toolbar': BetterToolbar,
     'modules/uploader': FileUploader,
     'modules/shortcut-key': ShortCutKey,
+    'modules/collaboration': CollaborativeEditor,
 
     'themes/snow': SnowTheme,
 
