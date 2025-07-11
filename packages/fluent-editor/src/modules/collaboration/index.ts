@@ -1,5 +1,4 @@
 import { CollaborativeEditor } from './collaborative-editor'
-import { CollaborationConfig, CollaborationOptions } from './types'
 
 // 导出主要类和接口
 export { CollaborativeEditor }
@@ -20,7 +19,7 @@ export { CollaborativeEditor }
 export const collaborationModule = {
   name: 'collaboration',
   component: CollaborativeEditor,
-  defaultOptions: CollaborationConfig.DEFAULT_OPTIONS,
+  // defaultOptions: CollaborationConfig.DEFAULT_OPTIONS,
 }
 
 export default CollaborativeEditor

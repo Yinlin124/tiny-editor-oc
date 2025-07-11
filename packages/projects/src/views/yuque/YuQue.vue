@@ -73,6 +73,10 @@ onMounted(() => {
           return result
         },
       },
+      'collaboration': {
+        websocketUrl: 'wss://demos.yjs.dev/ws',
+        roomId: 'OC-demo-YL-1231dfsa3213',
+      },
     },
   })
 })
