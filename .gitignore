@@ -6,6 +6,7 @@ test-results
 cache
 .temp
 .eslintcache
+.augment
 
 # local env
 .env.local

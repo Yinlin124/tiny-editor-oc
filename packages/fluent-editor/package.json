@@ -38,6 +38,7 @@
     "quill-easy-color": "^0.0.9",
     "quill-shortcut-key": "^0.0.5",
     "y-indexeddb": "^9.0.12",
+    "y-protocols": "^1.0.6",
     "y-quill": "^1.0.0",
     "y-websocket": "^3.0.0",
     "yjs": "^13.6.27"

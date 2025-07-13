@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FluentEditor, { generateTableUp, generateTableUpShortKeyMenu } from '@opentiny/fluent-editor'
+import FluentEditor, { Delta, generateTableUp, generateTableUpShortKeyMenu } from '@opentiny/fluent-editor'
 import HeaderList from 'quill-header-list'
 import { createSelectBox, defaultCustomSelect, TableMenuContextmenu, TableResizeLine, TableResizeScale, TableSelection, TableUp } from 'quill-table-up'
 import { onMounted, ref } from 'vue'
@@ -39,6 +39,8 @@ const TOOLBAR_CONFIG = [
   ],
   [{ list: 'check' }, 'link', 'blockquote', 'divider'],
   [{ 'table-up': [] }, 'header-list'],
+  // 'imgs'
+  ['file', 'image', 'video'],
 ]
 
 onMounted(() => {
@@ -73,9 +75,27 @@ onMounted(() => {
           return result
         },
       },
+      // 图片上传
+      'uploader': {
+        // only allow image
+        mimetypes: ['image/*'],
+        handler(range: Range, files: File[]) {
+          return files.map((_, i) => i % 2 === 0 ? false : 'https://yinlin-img.oss-cn-beijing.aliyuncs.com/img/20250523003800.png')
+        },
+        fail(file: File, range: Range) {
+          this.quill.updateContents(new Delta().retain(range.index).delete(1).insert({ image: 'https://yinlin-img.oss-cn-beijing.aliyuncs.com/img/20250523003800.png' }))
+        },
+      },
       'collaboration': {
-        websocketUrl: 'wss://demos.yjs.dev/ws',
-        roomId: 'OC-demo-YL-1231dfsa3213',
+        providers: [
+          {
+            type: 'websocket',
+            options: {
+              serverUrl: 'wss://demos.yjs.dev/ws',
+              roomname: 'OC-demo-YL-1231dfsadsa',
+            },
+          },
+        ],
       },
     },
   })
