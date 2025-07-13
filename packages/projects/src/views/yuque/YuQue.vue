@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import FluentEditor, { Delta, generateTableUp, generateTableUpShortKeyMenu } from '@opentiny/fluent-editor'
+import Quill from 'quill'
+import QuillCursors from 'quill-cursors'
 import HeaderList from 'quill-header-list'
 import { createSelectBox, defaultCustomSelect, TableMenuContextmenu, TableResizeLine, TableResizeScale, TableSelection, TableUp } from 'quill-table-up'
 import { onMounted, ref } from 'vue'
@@ -43,6 +45,7 @@ const TOOLBAR_CONFIG = [
   ['file', 'image', 'video'],
 ]
 
+Quill.register('modules/cursors', QuillCursors)
 onMounted(() => {
   editor = new FluentEditor('#editor', {
     theme: 'snow',
@@ -86,23 +89,30 @@ onMounted(() => {
           this.quill.updateContents(new Delta().retain(range.index).delete(1).insert({ image: 'https://yinlin-img.oss-cn-beijing.aliyuncs.com/img/20250523003800.png' }))
         },
       },
+      'cursors': true, // 一定要在 collaboration 前开启
       'collaboration': {
         providers: [
           {
             type: 'websocket',
             options: {
               serverUrl: 'wss://demos.yjs.dev/ws',
-              roomname: 'OC-demo-YL-1231dfsadsa',
+              roomname: 'OC-demo-YL-1231dfsa',
             },
           },
         ],
+        awareness: {
+          state: {
+            name: `user${Math.random().toString(36).substring(2, 15)}`,
+            color: '#193549',
+          },
+        },
       },
     },
   })
 })
 </script>
 
-<template>
+<!-- <template>
   <div
     class="fixed top-0 z-1 h-[52px] w-full flex items-center pl-[16px] bg-white"
   >
@@ -252,6 +262,10 @@ onMounted(() => {
   <div ref="headerListRef" class="header-list is-hidden fixed top-[140px] right-0">
     <p>大纲</p>
   </div>
+</template> -->
+
+<template>
+  <div id="editor" />
 </template>
 
 <style lang="scss">

@@ -1,3 +1,4 @@
+import QuillCursors from 'quill-cursors' // 光标
 import { FontStyle, LineHeightStyle, SizeStyle, TextIndentStyle } from './attributors'
 import { EN_US } from './config/i18n/en-us'
 import { ZH_CN } from './config/i18n/zh-cn'
@@ -60,7 +61,7 @@ FluentEditor.register(
     'modules/uploader': FileUploader,
     'modules/shortcut-key': ShortCutKey,
     'modules/collaboration': CollaborativeEditor,
-
+    'modules/cursors': QuillCursors,
     'themes/snow': SnowTheme,
 
     'ui/icons': Icons,

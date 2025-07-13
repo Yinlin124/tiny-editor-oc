@@ -1,12 +1,15 @@
+import type { Awareness } from 'y-protocols/awareness'
 import type FluentEditor from '../../fluent-editor'
 import type { YjsOptions } from './types'
 import { QuillBinding } from 'y-quill'
 import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
+import { setupAwareness } from './awareness/awareness'
 
 export class CollaborativeEditor {
   private ydoc: Y.Doc = new Y.Doc()
-  private provider: WebsocketProvider | null = null
+  private provider: WebsocketProvider
+  private awareness: Awareness
 
   constructor(
     public quill: FluentEditor,
@@ -19,32 +22,36 @@ export class CollaborativeEditor {
     if (this.options.providers && this.options.providers.length > 0) {
       for (const providerConfig of this.options.providers) {
         if (providerConfig.type === 'websocket') {
-          const {
-            serverUrl,
-            roomname,
-            ...restOptions
-          } = providerConfig.options
           this.provider = new WebsocketProvider(
-            serverUrl,
-            roomname,
+            providerConfig.options.serverUrl,
+            providerConfig.options.roomname,
             this.ydoc,
-            restOptions,
+            providerConfig.options.opts,
           )
         }
       }
     }
 
-    // 3. 绑定 Quill 编辑器
+    // 3. 设置 Awareness
+    const awareness = setupAwareness(this.options.awareness, this.provider.awareness)
+    this.awareness = awareness || this.provider.awareness
+
+    // 4. 绑定 Quill 编辑器
     if (this.provider) {
       const ytext = this.ydoc.getText('quill')
       new QuillBinding(
         ytext,
         this.quill,
-        this.options.awareness || this.provider.awareness,
+        this.awareness,
       )
+      console.log('在线用户列表', this.awareness.getStates())
     }
     else {
       console.error('未能初始化协同编辑器：没有配置有效的提供者')
     }
+  }
+
+  public getAwareness(): Awareness {
+    return this.awareness
   }
 }
