@@ -95,7 +95,7 @@ onMounted(() => {
           {
             type: 'websocket',
             options: {
-              serverUrl: 'wss://demos.yjs.dev/ws',
+              serverUrl: 'ws://127.0.0.1:1234',
               roomname: 'OC-demo-YL-1231dfsa',
             },
           },

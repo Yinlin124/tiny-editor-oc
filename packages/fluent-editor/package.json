@@ -32,6 +32,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@hocuspocus/provider": "^2.15.2",
     "lodash-es": "^4.17.15",
     "quill": "^2.0.0",
     "quill-cursors": "^4.0.4",
