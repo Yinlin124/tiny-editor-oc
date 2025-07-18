@@ -93,10 +93,10 @@ onMounted(() => {
       'collaboration': {
         providers: [
           {
-            type: 'websocket',
+            type: 'webrtc',
             options: {
-              serverUrl: 'ws://127.0.0.1:1234',
-              roomname: 'OC-demo-YL-1231dfsa',
+              roomName: 'OC-demo-YL',
+              signaling: ['ws://localhost:4444'],
             },
           },
         ],

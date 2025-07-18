@@ -37,12 +37,7 @@ export interface AwarenessOptions {
   timeout?: number | undefined
 }
 
-/**
- * 初始化并配置 Awareness
- * @param options Awareness 配置选项
- * @param defaultAwareness 传入需要构造的 awareness
- * @returns 配置好的 Awareness 实例
- */
+
 export function setupAwareness(options?: AwarenessOptions, defaultAwareness?: Awareness): Awareness | null {
   if (!defaultAwareness) return null
 
@@ -51,21 +46,21 @@ export function setupAwareness(options?: AwarenessOptions, defaultAwareness?: Aw
   if (options?.state) {
     awareness.setLocalStateField('user', options.state)
   }
-  if (options?.events) {
-    if (options.events.change) {
-      awareness.on('change', options.events.change)
-    }
-    if (options.events.update) {
-      awareness.on('update', options.events.update)
-    }
-    if (options.events.destroy) {
-      awareness.on('destroy', options.events.destroy)
-    }
-  }
+  // if (options?.events) {
+  //   if (options.events.change) {
+  //     awareness.on('change', options.events.change)
+  //   }
+  //   if (options.events.update) {
+  //     awareness.on('update', options.events.update)
+  //   }
+  //   if (options.events.destroy) {
+  //     awareness.on('destroy', options.events.destroy)
+  //   }
+  // }
 
-  if (options?.timeout !== undefined && typeof awareness.setLocalStateField === 'function') {
-    awareness.setLocalStateField('timeout', options.timeout)
-  }
+  // if (options?.timeout !== undefined && typeof awareness.setLocalStateField === 'function') {
+  //   awareness.setLocalStateField('timeout', options.timeout)
+  // }
 
   return awareness
 }

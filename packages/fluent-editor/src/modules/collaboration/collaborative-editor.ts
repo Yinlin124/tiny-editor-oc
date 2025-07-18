@@ -1,17 +1,19 @@
 import type { HocuspocusProvider } from '@hocuspocus/provider'
 import type { Awareness } from 'y-protocols/awareness'
+import type { WebrtcProvider } from 'y-webrtc'
 import type FluentEditor from '../../fluent-editor'
+import type { WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
 import type { YjsOptions } from './types'
 import { HocuspocusProviderWebsocket } from '@hocuspocus/provider'
 import { QuillBinding } from 'y-quill'
 import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 import { setupAwareness } from './awareness/awareness'
-import { setupHocuspocusProvider, setupWebsocketProvider } from './provider'
+import { setupHocuspocusProvider, setupWebRTCProvider, setupWebsocketProvider } from './provider'
 
 export class CollaborativeEditor {
   private ydoc: Y.Doc = new Y.Doc()
-  private provider: WebsocketProvider | HocuspocusProvider
+  private provider: WebsocketProvider | HocuspocusProvider | WebrtcProvider
   private awareness: Awareness
 
   constructor(
@@ -25,10 +27,13 @@ export class CollaborativeEditor {
     if (this.options.providers && this.options.providers.length > 0) {
       for (const providerConfig of this.options.providers) {
         if (providerConfig.type === 'websocket') {
-          this.provider = setupWebsocketProvider(providerConfig.options, this.ydoc)
+          this.provider = setupWebsocketProvider(providerConfig.options as WebsocketProviderOptions, this.ydoc)
         }
         else if (providerConfig.type === 'hocuspocus') {
           this.provider = new WebsocketProvider('ws://127.0.0.1:1234', 'hocuspocus-demos-quill', this.ydoc)
+        }
+        else if (providerConfig.type === 'webrtc') {
+          this.provider = setupWebRTCProvider(providerConfig.options as WebRTCProviderOptions, this.ydoc)
         }
       }
       this.provider.on('sync', () => {
