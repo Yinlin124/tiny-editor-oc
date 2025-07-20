@@ -1,6 +1,6 @@
 import type { Awareness } from 'y-protocols/awareness'
 import type * as Y from 'yjs'
-import type { AwarenessOptions } from './awareness'
+import type { AwarenessOptions, IndexedDBOptions } from './awareness'
 import type { HocuspocusProviderOptions, WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
 
 export interface YjsOptions {
@@ -13,5 +13,5 @@ export interface YjsOptions {
   }[]
   // 用户感知
   awareness?: AwarenessOptions
-
+  offline?: boolean | IndexedDBOptions
 }

@@ -9,6 +9,7 @@ import { QuillBinding } from 'y-quill'
 import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 import { setupAwareness } from './awareness/awareness'
+import { setupIndexedDB } from './awareness/y-indexeddb'
 import { setupHocuspocusProvider, setupWebRTCProvider, setupWebsocketProvider } from './provider'
 
 export class CollaborativeEditor {
@@ -58,6 +59,10 @@ export class CollaborativeEditor {
     }
     else {
       console.error('未能初始化协同编辑器：没有配置有效的提供者')
+    }
+    // offline
+    if (this.options.offline) {
+      setupIndexedDB(this.ydoc, typeof this.options.offline === 'object' ? this.options.offline : undefined)
     }
   }
 

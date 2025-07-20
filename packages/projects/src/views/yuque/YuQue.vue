@@ -106,13 +106,14 @@ onMounted(() => {
             color: '#193549',
           },
         },
+        offline: true,
       },
     },
   })
 })
 </script>
 
-<!-- <template>
+<template>
   <div
     class="fixed top-0 z-1 h-[52px] w-full flex items-center pl-[16px] bg-white"
   >
@@ -122,153 +123,46 @@ onMounted(() => {
     <span>{{ title }}</span>
   </div>
   <div class="!mt-[94px]">
-    <div class="flex justify-center pt-[33px] pb-[26px]">
+    <!-- <div class="titleBox flex justify-center pt-[33px] pb-[26px]">
       <textarea v-model="title" placeholder="请输入标题" class="w-[750px] text-[#262626] h-[54px] outline-none resize-none text-[36px] font-bold placeholder-[#bfbfbf]" />
-    </div>
-    <div id="editor" class="!border-0 max-w-[750px] !ml-auto !mr-auto">
-      <p>
-        这是一篇<a
-          class="ql-normal-link"
-          href="https://opentiny.github.io/tiny-editor/"
-          target="_blank"
-        >测试文档</a>
-      </p>
-      <p>这是<strong>粗体</strong></p>
-      <p>这是<em>斜体</em></p>
-      <p>这是<u class="ql-custom-strike">删除线</u></p>
-      <p>这是<u>下划线</u></p>
-      <p>这是上标X<sup>2</sup>和下标X<sub>2</sub></p>
-      <p>
-        这是<span style="color: rgb(223, 42, 63)">文本色</span>和<span
-          style="background-color: rgb(116, 182, 2)"
-        >背景色</span>
-      </p>
-      <ol class="unchecked">
-        <li class="bullet">
-          <span class="ql-ui" contenteditable="false" />这是一个无序列表
-        </li>
-        <li class="bullet">
-          <span class="ql-ui" contenteditable="false" />这是一个无序列表
-        </li>
-        <li class="ordered">
-          <span class="ql-ui" contenteditable="false" />这是一个有序列表
-        </li>
-        <li class="ordered">
-          <span class="ql-ui" contenteditable="false" />这是一个有序列表
-        </li>
-        <li class="unchecked">
-          <span class="ql-ui" contenteditable="false" />这是一个任务项
-        </li>
-        <li class="unchecked">
-          <span class="ql-ui" contenteditable="false" />这是一个任务项
-        </li>
-      </ol>
-      <blockquote>这是一段引用</blockquote>
-      <blockquote>这是一段引用</blockquote>
-      <p>
-        这是一段<code style="background-color: rgba(0, 0, 0, 0.06)">行内代码</code>。
-      </p>
-      <hr contenteditable="false">
-      <h1><span style="line-height: 36px">标题1</span></h1>
-      <h2><span style="line-height: 32px">标题2</span></h2>
-      <h3><span style="line-height: 28px">标题3</span></h3>
-      <h4><span style="line-height: 24px">标题4</span></h4>
-      <h5><span style="line-height: 24px">标题5</span></h5>
-      <h6><span style="line-height: 24px">标题6</span></h6>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <h1><span style="line-height: 36px">标题2</span></h1>
-      <p>正文</p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p><br></p>
-      <p>这是测试文档的底部。</p>
-    </div>
+    </div> -->
+    <div id="editor" class="!border-0 max-w-[750px] !ml-auto !mr-auto z-[2]" />
   </div>
   <div ref="headerListRef" class="header-list is-hidden fixed top-[140px] right-0">
     <p>大纲</p>
   </div>
-</template> -->
-
-<template>
-  <div id="editor" />
 </template>
 
 <style lang="scss">
+:deep(.ql-cursor-flag) {
+  z-index: 9999 !important;
+}
+
+// 确保所有光标相关元素都有足够高的层级
+:deep(.ql-cursor) {
+  z-index: 9999 !important;
+}
+
+:deep(.ql-cursor-caret) {
+  z-index: 9999 !important;
+}
+
+:deep(.ql-cursor-selection) {
+  z-index: 9998 !important;
+}
+
+// 如果有光标名称标签
+:deep(.ql-cursor-name) {
+  z-index: 10000 !important;
+}
+
+// 确保协作光标容器也有正确的层级
+:deep(.ql-cursors) {
+  z-index: 9999 !important;
+}
+.titleBox {
+  z-index: -1 !important;
+}
 .ql-editor {
   padding: 0 !important;
   min-height: calc(100vh - 94px);
