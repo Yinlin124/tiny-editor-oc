@@ -1,7 +1,8 @@
 import type * as Y from 'yjs'
+import type { ProviderEventHandlers } from '../types'
 import { WebsocketProvider } from 'y-websocket'
 
-export interface WebsocketProviderOptions {
+export interface WebsocketProviderOptions extends ProviderEventHandlers {
   /**
    * WebSocket server URL
    */
