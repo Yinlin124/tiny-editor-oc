@@ -3,7 +3,7 @@ import type { Awareness } from 'y-protocols/awareness'
 import type { WebrtcProvider } from 'y-webrtc'
 import type FluentEditor from '../../fluent-editor'
 import type { WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
-import type { YjsOptions } from './types'
+import type { ProviderConstructor, YjsOptions } from './types'
 import { HocuspocusProviderWebsocket } from '@hocuspocus/provider'
 import { QuillBinding } from 'y-quill'
 import { WebsocketProvider } from 'y-websocket'
@@ -35,6 +35,18 @@ export class CollaborativeEditor {
         }
         else if (providerConfig.type === 'webrtc') {
           this.provider = setupWebRTCProvider(providerConfig.options as WebRTCProviderOptions, this.ydoc)
+        }
+        else {
+          const CustomProvider = providerConfig as unknown as ProviderConstructor
+          this.provider = new CustomProvider({
+            options: providerConfig.options,
+            awareness: this.provider?.awareness,
+            doc: this.ydoc,
+            onConnect: providerConfig.onConnect,
+            onDisconnect: providerConfig.onDisconnect,
+            onError: providerConfig.onError,
+            onSyncChange: providerConfig.onSyncChange,
+          }) as any
         }
       }
       this.provider.on('sync', () => {
