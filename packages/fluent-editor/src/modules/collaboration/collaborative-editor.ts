@@ -1,12 +1,12 @@
 import type { HocuspocusProvider } from '@hocuspocus/provider'
 import type { Awareness } from 'y-protocols/awareness'
 import type { WebrtcProvider } from 'y-webrtc'
+import type { WebsocketProvider } from 'y-websocket'
 import type FluentEditor from '../../fluent-editor'
 import type { WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
 import type { YjsOptions } from './types'
 import { HocuspocusProviderWebsocket } from '@hocuspocus/provider'
 import { QuillBinding } from 'y-quill'
-import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 import { setupAwareness } from './awareness/awareness'
 import { setupIndexedDB } from './awareness/y-indexeddb'
@@ -30,15 +30,15 @@ export class CollaborativeEditor {
         if (providerConfig.type === 'websocket') {
           this.provider = setupWebsocketProvider(providerConfig.options as WebsocketProviderOptions, this.ydoc)
         }
-        else if (providerConfig.type === 'hocuspocus') {
-          this.provider = new WebsocketProvider('ws://127.0.0.1:1234', 'hocuspocus-demos-quill', this.ydoc)
-        }
+        // else if (providerConfig.type === 'hocuspocus') {
+        //   this.provider = new WebsocketProvider('ws://127.0.0.1:1234', 'hocuspocus-demos-quill', this.ydoc)
+        // }
         else if (providerConfig.type === 'webrtc') {
           this.provider = setupWebRTCProvider(providerConfig.options as WebRTCProviderOptions, this.ydoc)
         }
       }
       this.provider.on('sync', () => {
-        console.log('Hocuspocus 同步完成，文档内容:', this.ydoc.getText('quill').toString())
+        console.log('同步完成，文档内容:', this.ydoc.getText('tiny-editor').toJSON())
       })
     }
 
@@ -48,7 +48,7 @@ export class CollaborativeEditor {
 
     // 4. 绑定 Quill 编辑器
     if (this.provider) {
-      const ytext = this.ydoc.getText('quill')
+      const ytext = this.ydoc.getText('tiny-editor')
       new QuillBinding(
         ytext,
         this.quill,

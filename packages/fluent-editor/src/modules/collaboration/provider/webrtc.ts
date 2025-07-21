@@ -4,7 +4,7 @@ import { WebrtcProvider } from 'y-webrtc'
 
 export interface WebRTCProviderOptions {
   /** Room name for the collaboration */
-  roomName: string
+  roomname: string
   /** Whether to filter broadcast channel connections */
   filterBcConns?: boolean
   /** Maximum number of WebRTC connections */

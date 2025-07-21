@@ -4,6 +4,7 @@ import type { AwarenessOptions, IndexedDBOptions } from './awareness'
 import type { HocuspocusProviderOptions, WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
 
 export interface YjsOptions {
+  id?: string
   // Yjs 核心配置
   ydoc?: Y.Doc
   // 提供者配置
