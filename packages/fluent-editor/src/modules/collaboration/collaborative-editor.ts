@@ -10,12 +10,14 @@ import { QuillBinding } from 'y-quill'
 import * as Y from 'yjs'
 import { setupAwareness } from './awareness/awareness'
 import { setupIndexedDB } from './awareness/y-indexeddb'
-import { setupHocuspocusProvider, setupWebRTCProvider, setupWebsocketProvider } from './provider'
+import { createProvider } from './provider/customProvider'
 
 export class CollaborativeEditor {
   private ydoc: Y.Doc = new Y.Doc()
-  private provider: WebsocketProvider | HocuspocusProvider | WebrtcProvider
+  private provider: any
   private awareness: Awareness
+  private _isConnected = false
+  private _isSynced = false
 
   constructor(
     public quill: FluentEditor,
@@ -25,38 +27,43 @@ export class CollaborativeEditor {
     this.ydoc = this.options.ydoc || new Y.Doc()
 
     // 2. 建立提供者连接
-    if (this.options.providers && this.options.providers.length > 0) {
-      for (const providerConfig of this.options.providers) {
-        if (providerConfig.type === 'websocket') {
-          this.provider = setupWebsocketProvider(providerConfig.options as WebsocketProviderOptions, this.ydoc)
-        }
-        // else if (providerConfig.type === 'hocuspocus') {
-        //   this.provider = new WebsocketProvider('ws://127.0.0.1:1234', 'hocuspocus-demos-quill', this.ydoc)
-        // }
-        else if (providerConfig.type === 'webrtc') {
-          this.provider = setupWebRTCProvider(providerConfig.options as WebRTCProviderOptions, this.ydoc)
-        }
-        else {
-          const CustomProvider = providerConfig as unknown as ProviderConstructor
-          this.provider = new CustomProvider({
-            options: providerConfig.options,
-            awareness: this.provider?.awareness,
-            doc: this.ydoc,
-            onConnect: providerConfig.onConnect,
-            onDisconnect: providerConfig.onDisconnect,
-            onError: providerConfig.onError,
-            onSyncChange: providerConfig.onSyncChange,
-          }) as any
-        }
+    if (this.options.provider) {
+      const providerConfig = this.options.provider
+      try {
+        // Create provider with shared handlers, Y.Doc, and Awareness
+        const provider = createProvider({
+          doc: this.ydoc,
+          options: 'options' in providerConfig ? providerConfig.options : {},
+          type: providerConfig.type,
+          onConnect: () => {
+            this._isConnected = true
+            providerConfig.onConnect?.()
+          },
+          onDisconnect: () => {
+            this._isConnected = false
+            providerConfig.onDisconnect?.()
+          },
+          onError: (error) => {
+            providerConfig.onError?.(error)
+          },
+          onSyncChange: (isSynced) => {
+            this._isSynced = isSynced
+            providerConfig.onSyncChange?.(isSynced)
+          },
+        })
+        this.provider = provider
+        console.log('this provider', this.provider)
+        // 3. 设置 Awareness - 在 provider 创建后
+        const awareness = setupAwareness(this.options.awareness, this.provider.awareness)
+        this.awareness = awareness || this.provider.awareness
       }
-      this.provider.on('sync', () => {
-        console.log('同步完成，文档内容:', this.ydoc.getText('tiny-editor').toJSON())
-      })
+      catch (error) {
+        console.warn(
+          `[yjs] Error creating provider of type ${item.type}:`,
+          error,
+        )
+      }
     }
-
-    // 3. 设置 Awareness
-    const awareness = setupAwareness(this.options.awareness, this.provider.awareness)
-    this.awareness = awareness || this.provider.awareness
 
     // 4. 绑定 Quill 编辑器
     if (this.provider) {
@@ -72,6 +79,7 @@ export class CollaborativeEditor {
     else {
       console.error('未能初始化协同编辑器：没有配置有效的提供者')
     }
+
     // offline
     if (this.options.offline) {
       setupIndexedDB(this.ydoc, typeof this.options.offline === 'object' ? this.options.offline : undefined)

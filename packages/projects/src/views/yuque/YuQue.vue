@@ -91,15 +91,23 @@ onMounted(() => {
       },
       'cursors': true, // 一定要在 collaboration 前开启
       'collaboration': {
-        providers: [
-          {
-            type: 'websocket',
-            options: {
-              serverUrl: 'ws://127.0.0.1:1234',
-              roomname: 'hocuspocus-demos-quill',
-            },
+        provider:
+        {
+          // type: 'webrtc',
+          // options: {
+          //   roomname: 'hocuspocus-demos-quill',
+          //   signaling: ['ws://localhost:4444'],
+          // },
+
+          type: 'websocket',
+          options: {
+            serverUrl: 'wss://demos.yjs.dev/ws',
+            roomname: 'hocuspocus-demos-quill',
           },
-        ],
+
+          // type: 'custom',
+          //
+        },
         awareness: {
           state: {
             name: `user${Math.random().toString(36).substring(2, 15)}`,
@@ -114,9 +122,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="fixed top-0 z-1 h-[52px] w-full flex items-center pl-[16px] bg-white"
-  >
+  <div class="fixed top-0 z-1 h-[52px] w-full flex items-center pl-[16px] bg-white">
     <RouterLink to="/" class="hidden">
       &lt;返回
     </RouterLink>
@@ -160,9 +166,11 @@ onMounted(() => {
 :deep(.ql-cursors) {
   z-index: 9999 !important;
 }
+
 .titleBox {
   z-index: -1 !important;
 }
+
 .ql-editor {
   padding: 0 !important;
   min-height: calc(100vh - 94px);
