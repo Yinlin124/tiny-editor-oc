@@ -1,8 +1,8 @@
 import type { Awareness } from 'y-protocols/awareness'
-import type * as Y from 'yjs'
 import type { ProviderEventHandlers } from '../types'
 import type { UnifiedProvider } from './customProvider'
 import { WebrtcProvider } from 'y-webrtc'
+import * as Y from 'yjs'
 
 export interface WebRTCProviderOptions {
   /** Room name for the collaboration */

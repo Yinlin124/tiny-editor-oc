@@ -111,7 +111,7 @@ onMounted(() => {
         awareness: {
           state: {
             name: `user${Math.random().toString(36).substring(2, 15)}`,
-            color: '#193549',
+            // color: '#193549',
           },
         },
         offline: true,

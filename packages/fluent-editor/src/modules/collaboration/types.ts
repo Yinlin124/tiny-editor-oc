@@ -4,7 +4,7 @@ import type { AwarenessOptions, IndexedDBOptions } from './awareness'
 import type { HocuspocusProviderOptions, WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
 import type { UnifiedProvider } from './provider/customProvider'
 
-// Provider 事件处理函数
+// Provider 事件回调处理函数
 export interface ProviderEventHandlers {
   onConnect?: () => void
   onDisconnect?: () => void
@@ -35,4 +35,10 @@ export interface YjsOptions {
   // 用户感知
   awareness?: AwarenessOptions
   offline?: boolean | IndexedDBOptions
+
+  // 事件回调
+  onConnect?: () => void
+  onDisconnect?: () => void
+  onError?: (error) => void
+  onSyncChange?: (isSynced: boolean) => void
 }

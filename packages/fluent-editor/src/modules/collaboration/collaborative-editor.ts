@@ -37,18 +37,18 @@ export class CollaborativeEditor {
           type: providerConfig.type,
           onConnect: () => {
             this._isConnected = true
-            providerConfig.onConnect?.()
+            this.options.onConnect?.()
           },
           onDisconnect: () => {
             this._isConnected = false
-            providerConfig.onDisconnect?.()
+            this.options.onDisconnect?.()
           },
           onError: (error) => {
-            providerConfig.onError?.(error)
+            this.options.onError?.(error)
           },
           onSyncChange: (isSynced) => {
             this._isSynced = isSynced
-            providerConfig.onSyncChange?.(isSynced)
+            this.options.onSyncChange?.(isSynced)
           },
         })
         this.provider = provider
