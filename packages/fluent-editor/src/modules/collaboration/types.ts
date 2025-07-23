@@ -1,10 +1,7 @@
-import type { Awareness } from 'y-protocols/awareness'
 import type * as Y from 'yjs'
 import type { AwarenessOptions, IndexedDBOptions } from './awareness'
-import type { HocuspocusProviderOptions, WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
-import type { UnifiedProvider } from './provider/customProvider'
+import type { WebRTCProviderOptions, WebsocketProviderOptions } from './provider'
 
-// Provider 事件回调处理函数
 export interface ProviderEventHandlers {
   onConnect?: () => void
   onDisconnect?: () => void
@@ -16,7 +13,6 @@ export interface BaseYjsProviderConfig extends ProviderEventHandlers {
   type: string
 }
 
-// 原配 Provider 配置
 export type WebRTCProviderConfig = BaseYjsProviderConfig & {
   options: WebRTCProviderOptions
   type: 'webrtc'
@@ -26,17 +22,18 @@ export type WebsocketProviderConfig = BaseYjsProviderConfig & {
   type: 'websocket'
 }
 
+export type CustomProviderConfig = BaseYjsProviderConfig & {
+  options: Record<string, any>
+  type: string
+}
+
 export interface YjsOptions {
-  id?: string
-  // Yjs 核心配置
   ydoc?: Y.Doc
-  // 提供者配置
-  provider: (WebRTCProviderConfig | WebsocketProviderConfig | UnifiedProvider)
-  // 用户感知
+  provider: (WebRTCProviderConfig | WebsocketProviderConfig | CustomProviderConfig)
   awareness?: AwarenessOptions
   offline?: boolean | IndexedDBOptions
 
-  // 事件回调
+  // callback
   onConnect?: () => void
   onDisconnect?: () => void
   onError?: (error) => void

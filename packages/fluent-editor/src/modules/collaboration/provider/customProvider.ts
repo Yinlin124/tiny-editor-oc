@@ -6,19 +6,16 @@ import { WebsocketProviderWrapper } from './websocket'
 
 export type ProviderRegistry = Record<string, ProviderConstructor>
 
-// Provider 构造函数
 export type ProviderConstructor<T = any> = new (
   props: ProviderConstructorProps<T>
 ) => UnifiedProvider
 
-// Provider 构造函数参数
 export type ProviderConstructorProps<T = any> = {
   options: T
   awareness?: Awareness
   doc?: Y.Doc
 } & ProviderEventHandlers
 
-// Provider 统一格式
 export interface UnifiedProvider {
   awareness: Awareness
   document: Y.Doc
@@ -35,18 +32,15 @@ const providerRegistry: ProviderRegistry = {
   webrtc: WebRTCProviderWrapper,
 }
 
-// Register a new provider type
 export function registerProviderType<T>(type: string, providerClass: ProviderConstructor<T>) {
   providerRegistry[type as string]
     = providerClass as ProviderConstructor
 }
 
-// Get a provider constructor by type
 export function getProviderClass(type: string): ProviderConstructor | undefined {
   return providerRegistry[type]
 }
 
-// Create a provider instance
 export function createProvider({
   type,
   ...props

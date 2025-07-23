@@ -5,20 +5,11 @@ import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
 
 export interface WebRTCProviderOptions {
-  /** Room name for the collaboration */
   roomname: string
-  /** Whether to filter broadcast channel connections */
   filterBcConns?: boolean
-  /** Maximum number of WebRTC connections */
   maxConns?: number
-  /** Optional password for the room */
   password?: string
-  /**
-   * Additional peer options for simple-peer. See
-   * [simple-peer](https://github.com/feross/simple-peer#api) for more details.
-   */
   peerOpts?: Record<string, unknown>
-  /** Optional signaling servers. Defaults to public servers if not specified */
   signaling?: string[]
 }
 
@@ -32,6 +23,35 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
   private onDisconnect?: () => void
   private onError?: (error: Error) => void
   private onSyncChange?: (isSynced: boolean) => void
+
+  connect = () => {
+    try {
+      this.provider.connect()
+    }
+    catch (error) {
+      console.warn('[yjs] Error connecting WebRTC provider:', error)
+    }
+  }
+
+  destroy = () => {
+    try {
+      this.provider.destroy()
+    }
+    catch (error) {
+      console.warn('[yjs] Error destroying WebRTC provider:', error)
+    }
+  }
+
+  disconnect = () => {
+    try {
+      this.provider.disconnect()
+      this._isConnected = false
+      this._isSynced = false
+    }
+    catch (error) {
+      console.warn('[yjs] Error disconnecting WebRTC provider:', error)
+    }
+  }
 
   constructor({
     awareness,
@@ -55,36 +75,25 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
     try {
       this.provider = new WebrtcProvider(options.roomname, this.doc, {
         awareness,
-        filterBcConns: options.filterBcConns,
-        maxConns: options.maxConns,
-        password: options.password,
-        peerOpts: options.peerOpts,
-        signaling: options.signaling,
+        ...options,
       })
 
-      // Set connection status
       this.provider.on('status', (status: { connected: boolean }) => {
         const wasConnected = this._isConnected
         this._isConnected = status.connected
-
         if (status.connected) {
-          // Notify about connection only if it wasn't connected before
           if (!wasConnected) {
-            onConnect?.()
+            this.onConnect?.()
           }
-          // Treat first connection as sync for P2P, trigger sync change if not already synced
           if (!this._isSynced) {
             this._isSynced = true
-            onSyncChange?.(true)
+            this.onSyncChange?.(true)
           }
         }
         else {
-          // Handle disconnection only if it was connected before
           if (wasConnected) {
-            onDisconnect?.()
+            this.onDisconnect?.()
 
-            // Explicitly set synced to false on disconnect if it was true
-            // This ensures onSyncChange(false) is called reliably
             if (this._isSynced) {
               this._isSynced = false
               onSyncChange?.(false)
@@ -96,49 +105,6 @@ export class WebRTCProviderWrapper implements UnifiedProvider {
     catch (error) {
       console.warn('[yjs] Error creating WebRTC provider:', error)
       onError?.(error instanceof Error ? error : new Error(String(error)))
-      // Don't throw, just log the error - the provider will be null
-    }
-  }
-
-  connect = () => {
-    if (this.provider) {
-      try {
-        this.provider.connect()
-      }
-      catch (error) {
-        console.warn('[yjs] Error connecting WebRTC provider:', error)
-      }
-    }
-  }
-
-  destroy = () => {
-    if (this.provider) {
-      try {
-        this.provider.destroy()
-      }
-      catch (error) {
-        console.warn('[yjs] Error destroying WebRTC provider:', error)
-      }
-    }
-  }
-
-  disconnect = () => {
-    if (this.provider) {
-      try {
-        this.provider.disconnect()
-        const wasSynced = this._isSynced
-
-        this._isConnected = false
-        this._isSynced = false
-
-        // If we were synced, notify about sync state change
-        if (wasSynced) {
-          this.onSyncChange?.(false)
-        }
-      }
-      catch (error) {
-        console.warn('[yjs] Error disconnecting WebRTC provider:', error)
-      }
     }
   }
 
